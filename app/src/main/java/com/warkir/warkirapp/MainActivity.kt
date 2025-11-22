@@ -15,9 +15,7 @@ class MainActivity : AppCompatActivity() {
         viewCompat()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.main)
-
-        askdkaskda
-
+        alsdmlasldmkasmkdmakd
     }
 
     /*
