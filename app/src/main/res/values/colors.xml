@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary -->
+    <color name="colorPrimary">#369EB2</color>
+    <color name="colorPrimaryDark">#287D8C</color>
+    <color name="colorPrimaryLight">#A6D9E1</color>
+
+    <!-- Secondary -->
+    <color name="colorSecondary">#FFB703</color>
+
+    <!-- Accent -->
+    <color name="colorAccent">#2A4858</color>
+
+    <!-- Neutral -->
+    <color name="backgroundColor">#EEF2F5</color>
+    <color name="textPrimaryColor">#1B1F23</color>
+    <color name="textSecondaryColor">#6A767E</color>
+
+    <!--Generated Colors-->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
