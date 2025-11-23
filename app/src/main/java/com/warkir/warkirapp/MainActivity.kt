@@ -13,9 +13,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        viewCompat()
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.main)
+        viewCompat()
+        setContentView(binding.root)
     }
 
     /*
