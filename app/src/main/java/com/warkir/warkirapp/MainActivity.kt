@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /*
-    * Fungsi ini mengatur bagaimana tampilan kamu menyesuaikan diri agar tidak ketutupan status bar atau navigation bar.
+    * Fungsi ini mengatur bagaimana tampilan menyesuaikan diri agar tidak ketutupan status bar atau navigation bar.
     * Google mendorong desain Immersive UI / Edge-to-Edge:
       UI boleh sampai tepi layar untuk kesan luas dan modern, tapi tetap harus aman untuk konten.
     *
