@@ -1,5 +1,6 @@
 package com.warkir.warkirapp
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.animation.AccelerateInterpolator
 import androidx.activity.enableEdgeToEdge
@@ -12,11 +13,18 @@ import com.warkir.warkirapp.databinding.ActivityMainBinding
 //Activity Utama
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var mediaPlayer: MediaPlayer? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         viewCompat()
+        try {
+            mediaPlayer = MediaPlayer.create(this, R.raw.eating)
+            mediaPlayer?.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         val splashScreen = installSplashScreen()
         setContentView(binding.root)
         splashScreen.setOnExitAnimationListener { splashScreenView ->
@@ -26,9 +34,26 @@ class MainActivity : AppCompatActivity() {
                 .setDuration(1000L)
                 .setInterpolator(
                     AccelerateInterpolator()
-                ).withEndAction { splashScreenView.remove() }.start()
+                ).withEndAction {
+                    splashScreenView.remove()
+                    try {
+                        if (mediaPlayer?.isPlaying == true) {
+                            mediaPlayer?.stop()
+                        }
+                        mediaPlayer?.release()
+                        mediaPlayer = null
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }.start()
 
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 
     /*
