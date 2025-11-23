@@ -7,7 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.warkir.warkirapp.databinding.ActivityMainBinding
 
 //Activity Utama
@@ -18,13 +20,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+        windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
+
         viewCompat()
+
         try {
             mediaPlayer = MediaPlayer.create(this, R.raw.eating)
             mediaPlayer?.start()
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
         val splashScreen = installSplashScreen()
         setContentView(binding.root)
         splashScreen.setOnExitAnimationListener { splashScreenView ->
