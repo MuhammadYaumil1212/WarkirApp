@@ -1,8 +1,10 @@
 package com.warkir.warkirapp
 
 import android.os.Bundle
+import android.view.animation.AccelerateInterpolator
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.warkir.warkirapp.databinding.ActivityMainBinding
@@ -15,7 +17,18 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         viewCompat()
+        val splashScreen = installSplashScreen()
         setContentView(binding.root)
+        splashScreen.setOnExitAnimationListener { splashScreenView ->
+            splashScreenView.view
+                .animate()
+                .alpha(0f)
+                .setDuration(1000L)
+                .setInterpolator(
+                    AccelerateInterpolator()
+                ).withEndAction { splashScreenView.remove() }.start()
+
+        }
     }
 
     /*
@@ -24,9 +37,10 @@ class MainActivity : AppCompatActivity() {
       UI boleh sampai tepi layar untuk kesan luas dan modern, tapi tetap harus aman untuk konten.
     *
     * */
-    private fun viewCompat() = ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-        val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-        v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-        insets
-    }
+    private fun viewCompat() =
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 }
