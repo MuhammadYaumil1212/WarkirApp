@@ -11,6 +11,9 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.warkir.warkirapp.databinding.ActivityMainBinding
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.postgrest.Postgrest
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +31,25 @@ class MainActivity : AppCompatActivity() {
         setupEdgeToEdge()
         setupSplashExitAnimation(splashScreen)
         prepareSound()
+        supabaseGetClient()
+    }
+
+//    private fun getData() {
+//        lifecycleScope.launch {
+//            val client = supabaseGetClient()
+//            val clientSupa = client.postgrest["users"].select()
+//            clientSupa.decodeList<User>()
+//            Log.d("SUPABASE", "data list : ${clientSupa.data}")
+//        }
+//    }
+
+    private fun supabaseGetClient(): SupabaseClient {
+        return createSupabaseClient(
+            supabaseUrl = "https://hwihalqedwjglqnvjxnc.supabase.co",
+            supabaseKey = "sb_publishable_c2uplatUZhOdaq-fVZWt1w_V-K12NsW"
+        ) {
+            install(Postgrest)
+        }
     }
 
     private fun setupEdgeToEdge() {
@@ -43,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             hide(WindowInsetsCompat.Type.navigationBars())
         }
     }
-    
+
     private fun setupSplashExitAnimation(splashScreen: androidx.core.splashscreen.SplashScreen) {
         splashScreen.setOnExitAnimationListener { splashView ->
             splashView.view.animate()

@@ -5,6 +5,12 @@ pemesanan UMKM kampus yang praktis, cepat, dan modern.
 
 ---
 
+## API-KEYS
+
+> URL : https://hwihalqedwjglqnvjxnc.supabase.co
+> Publish Key : sb_publishable_c2uplatUZhOdaq-fVZWt1w_V-K12NsW
+> Secret Key : sb_secret_ll6ZohhgrpES0XSBrE8TPA_lRMZ8-xj
+
 ## Libraries Used
 
 Berikut library utama yang digunakan pada project ini:
