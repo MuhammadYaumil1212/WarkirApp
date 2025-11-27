@@ -12,72 +12,67 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.warkir.warkirapp.databinding.ActivityMainBinding
 
-//Activity Utama
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
     private var mediaPlayer: MediaPlayer? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
+        val splashScreen = installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-        
-        windowInsetsController.systemBarsBehavior =
-            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        setupEdgeToEdge()
+        setupSplashExitAnimation(splashScreen)
+        prepareSound()
+    }
 
-        windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
-
-        viewCompat()
-
-        try {
-            mediaPlayer = MediaPlayer.create(this, R.raw.eating)
-            mediaPlayer?.start()
-        } catch (e: Exception) {
-            e.printStackTrace()
+    private fun setupEdgeToEdge() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+            insets
         }
 
-        val splashScreen = installSplashScreen()
-        setContentView(binding.root)
-        splashScreen.setOnExitAnimationListener { splashScreenView ->
-            splashScreenView.view
-                .animate()
+        WindowInsetsControllerCompat(window, binding.root).apply {
+            systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            hide(WindowInsetsCompat.Type.navigationBars())
+        }
+    }
+    
+    private fun setupSplashExitAnimation(splashScreen: androidx.core.splashscreen.SplashScreen) {
+        splashScreen.setOnExitAnimationListener { splashView ->
+            splashView.view.animate()
                 .alpha(0f)
-                .setDuration(1000L)
-                .setInterpolator(
-                    AccelerateInterpolator()
-                ).withEndAction {
-                    splashScreenView.remove()
-                    try {
-                        if (mediaPlayer?.isPlaying == true) {
-                            mediaPlayer?.stop()
-                        }
-                        mediaPlayer?.release()
-                        mediaPlayer = null
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }.start()
-
+                .setDuration(800L)
+                .setInterpolator(AccelerateInterpolator())
+                .withEndAction {
+                    splashView.remove()
+                    stopAndReleaseSound()
+                }
+                .start()
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mediaPlayer?.release()
+    private fun prepareSound() {
+        mediaPlayer = MediaPlayer.create(this, R.raw.eating)
+        mediaPlayer?.start()
+    }
+
+    private fun stopAndReleaseSound() {
+        mediaPlayer?.apply {
+            if (isPlaying) stop()
+            release()
+        }
         mediaPlayer = null
     }
 
-    /*
-    * Fungsi ini mengatur bagaimana tampilan menyesuaikan diri agar tidak ketutupan status bar atau navigation bar.
-    * Google mendorong desain Immersive UI / Edge-to-Edge:
-      UI boleh sampai tepi layar untuk kesan luas dan modern, tapi tetap harus aman untuk konten.
-    *
-    * */
-    private fun viewCompat() =
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onStop() {
+        super.onStop()
+        stopAndReleaseSound() // lebih aman mengikuti lifecycle
+    }
 }
