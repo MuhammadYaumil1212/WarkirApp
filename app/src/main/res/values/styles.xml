@@ -2,32 +2,55 @@
 <resources>
 
     <style name="h4">
-
-    </style>
-
-    <style name="h2">
-
-
+        <item name="android:textSize">@dimen/text_h4</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/inter_font</item>
     </style>
 
     <style name="h3">
-
-
+        <item name="android:textSize">@dimen/text_h3</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/inter_font</item>
     </style>
 
-    <style name="primaryButtonStyle">
-
-
+    <style name="h2">
+        <item name="android:textSize">@dimen/text_h2</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/inter_font</item>
     </style>
 
-    <style name="secondaryButtonStyle">
+    <style name="warkir_font">
+        <item name="android:textSize">@dimen/text_h2</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="fontFamily">@font/berkshire_family</item>
+    </style>
 
+    <style name="primaryButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@null</item>
+        <item name="android:background">@drawable/button_primary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/inter_font</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_button</item>
+    </style>
 
+    <style name="secondaryButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@null</item>
+        <item name="android:background">@drawable/button_secondary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/inter_font</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_button</item>
     </style>
 
     <style name="editText">
-
-
+        <item name="android:background">@drawable/bg_input_border</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/hintGrey</item>
+        <item name="android:fontFamily">@font/inter_font</item>
+        <item name="android:textSize">@dimen/text_input</item>
+        <item name="android:padding">16dp</item>
     </style>
+
 
 </resources>

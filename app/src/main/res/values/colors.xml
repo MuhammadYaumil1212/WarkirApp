@@ -5,9 +5,6 @@
     <color name="colorPrimaryDark">#287D8C</color>
     <color name="colorPrimaryLight">#A6D9E1</color>
 
-    <!-- Secondary -->
-    <color name="colorSecondary">#FFB703</color>
-
     <!-- Accent -->
     <color name="colorAccent">#2A4858</color>
 
@@ -16,7 +13,8 @@
     <color name="textPrimaryColor">#1B1F23</color>
     <color name="textSecondaryColor">#6A767E</color>
 
-    <!--Generated Colors-->
-    <color name="black">#FF000000</color>
+    <!-- Generic Colors-->
+    <color name="black">#4E4A4A</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="hintGrey">#798487</color>
 </resources>
