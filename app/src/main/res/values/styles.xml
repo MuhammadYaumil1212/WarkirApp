@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="h4">
+
+    </style>
+
+    <style name="h2">
+
+
+    </style>
+
+    <style name="h3">
+
+
+    </style>
+
+    <style name="primaryButtonStyle">
+
+
+    </style>
+
+    <style name="secondaryButtonStyle">
+
+
+    </style>
+
+    <style name="editText">
+
+
+    </style>
+
+</resources>

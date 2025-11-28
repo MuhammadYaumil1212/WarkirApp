@@ -3,6 +3,9 @@
     <style name="Base.Theme.WarkirApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:fontFamily">@font/inter_font</item>
+        <item name="fontFamily">@font/inter_font</item>
+
     </style>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
@@ -15,5 +18,5 @@
 
         <item name="postSplashScreenTheme">@style/Base.Theme.WarkirApp</item>
     </style>
-    
+
 </resources>
