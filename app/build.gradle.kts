@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     kotlin("plugin.serialization") version "2.0.21"
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -20,6 +21,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
+        buildConfig = true
         viewBinding = true
     }
     buildTypes {
@@ -57,4 +59,7 @@ dependencies {
     implementation(libs.postgrest.kt)
     implementation(libs.auth.kt)
     implementation(libs.realtime.kt)
+    //google maps
+    implementation("com.google.maps.android:maps-utils-ktx:5.1.1")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 }
