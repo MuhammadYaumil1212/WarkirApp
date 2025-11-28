@@ -54,7 +54,7 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
         val bottomSheetLayout = binding.bottomSheetLayout
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout)
         bottomSheetBehavior.isHideable = false
-        
+
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
