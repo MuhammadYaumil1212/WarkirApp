@@ -1,60 +1,133 @@
 package com.warkir.warkirapp.Location.presentations
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.warkir.warkirapp.R
+import com.warkir.warkirapp.databinding.FragmentLocationBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Locale
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [LocationFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class LocationFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+class LocationFragment : Fragment(), OnMapReadyCallback {
+    private var _binding: FragmentLocationBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var mMap: GoogleMap
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var geocoder: Geocoder
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_location, container, false)
+    ): View {
+        _binding = FragmentLocationBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LocationFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LocationFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        geocoder = Geocoder(requireContext(), Locale.getDefault())
+        binding.btnConfirmLocation.setOnClickListener {}
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
+        val bottomSheetLayout = binding.bottomSheetLayout
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout)
+        bottomSheetBehavior.isHideable = false
+        
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        mapFragment?.getMapAsync(this)
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    private fun getAddressFromLatLng(latLng: LatLng) {
+        binding.tvAddressTitle.text = "Sedang mencari alamat..."
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+                if (!addresses.isNullOrEmpty()) {
+                    val address = addresses[0]
+                    val fullAddress = address.getAddressLine(0)
+                    withContext(Dispatchers.Main) {
+                        binding.tvAddressTitle.text = fullAddress
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        binding.tvAddressTitle.text = "Alamat tidak ditemukan"
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    binding.tvAddressTitle.text = "Gagal memuat alamat"
                 }
             }
+        }
+    }
+
+    private fun getCurrentDeviceLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            mMap.isMyLocationEnabled = true
+            mMap.setPadding(0, 0, 0, 300)
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    val currentLatLng = LatLng(location.latitude, location.longitude)
+                    updateLocationUI(currentLatLng)
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Lokasi tidak ditemukan. Pastikan GPS aktif.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+
+    private fun updateLocationUI(latLng: LatLng) {
+        mMap.clear()
+        mMap.addMarker(MarkerOptions().position(latLng))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
+        getAddressFromLatLng(latLng)
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        mMap.uiSettings.isZoomControlsEnabled = true
+        mMap.uiSettings.isCompassEnabled = true
+
+        mMap.setOnMapClickListener { latLng ->
+            updateLocationUI(latLng)
+        }
+        getCurrentDeviceLocation()
     }
 }

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/permissionFragment">
+
+    <fragment
+        android:id="@+id/permissionFragment"
+        android:name="com.warkir.warkirapp.permission.presentations.PermissionFragment"
+        android:label="fragment_permission"
+        tools:layout="@layout/fragment_permission">
+        <action
+            android:id="@+id/action_permissionFragment_to_locationFragments"
+            app:destination="@id/locationFragments" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/locationFragments"
+        android:name="com.warkir.warkirapp.Location.presentations.LocationFragment"
+        android:label="fragment_location"
+        tools:layout="@layout/fragment_location">
+        <action
+            android:id="@+id/action_locationFragments_to_searchLocationFragments"
+            app:destination="@id/searchLocationFragments" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchLocationFragments"
+        android:name="com.warkir.warkirapp.permission.presentations.PermissionFragment"
+        android:label="fragment_permission"
+        tools:layout="@layout/fragment_search_locations">
+        <action
+            android:id="@+id/action_searchLocationFragments_to_welcomeScreenFragments"
+            app:destination="@id/welcomeScreenFragments" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/welcomeScreenFragments"
+        android:name="com.warkir.warkirapp.permission.presentations.PermissionFragment"
+        android:label="fragment_permission"
+        tools:layout="@layout/fragment_welcome_screen">
+        <action
+            android:id="@+id/action_welcomeScreenFragments_to_loginFragments"
+            app:destination="@id/loginFragments" />
+        <action
+            android:id="@+id/action_welcomeScreenFragments_to_registerFragments"
+            app:destination="@id/registerFragments" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragments"
+        android:name="com.warkir.warkirapp.permission.presentations.PermissionFragment"
+        android:label="fragment_permission"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragments_to_homeFragments"
+            app:destination="@id/homeFragments" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragments"
+        android:name="com.warkir.warkirapp.permission.presentations.PermissionFragment"
+        android:label="fragment_permission"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerFragments_to_homeFragments"
+            app:destination="@id/homeFragments" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragments"
+        android:name="com.warkir.warkirapp.permission.presentations.PermissionFragment"
+        android:label="fragment_permission"
+        tools:layout="@layout/fragment_home" />
+</navigation>

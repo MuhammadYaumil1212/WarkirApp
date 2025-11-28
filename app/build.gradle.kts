@@ -62,4 +62,8 @@ dependencies {
     //google maps
     implementation("com.google.maps.android:maps-utils-ktx:5.1.1")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    //jetpack nav
+    implementation("androidx.navigation:navigation-fragment-ktx:2.9.6")
+    implementation("androidx.navigation:navigation-ui-ktx:2.9.6")
 }

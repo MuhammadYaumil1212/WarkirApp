@@ -29,9 +29,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupEdgeToEdge() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+            view.setPadding(bars.left, 0, bars.right, 0)
             insets
         }
 
@@ -71,6 +71,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        stopAndReleaseSound() // lebih aman mengikuti lifecycle
+        stopAndReleaseSound()
     }
 }
