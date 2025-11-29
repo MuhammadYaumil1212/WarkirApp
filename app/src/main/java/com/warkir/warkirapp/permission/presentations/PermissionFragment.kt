@@ -2,6 +2,7 @@ package com.warkir.warkirapp.permission.presentations
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -18,6 +20,11 @@ import com.warkir.warkirapp.databinding.FragmentPermissionBinding
 class PermissionFragment : Fragment() {
     private var _binding: FragmentPermissionBinding? = null
     private val binding get() = _binding!!
+    override fun onStart() {
+        super.onStart()
+        checkPermissionAndRedirect()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,8 +38,30 @@ class PermissionFragment : Fragment() {
         binding.btnGrantPermission.setOnClickListener { launchPermissionRequest() }
     }
 
+    private fun checkPermissionAndRedirect() {
+        val fineLocation = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        val coarseLocation = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+        if (fineLocation == PackageManager.PERMISSION_GRANTED ||
+            coarseLocation == PackageManager.PERMISSION_GRANTED
+        ) {
+            navigateToLocationPage()
+        }
+    }
+
+    private fun navigateToLocationPage() {
+        if (isAdded && view != null) {
+            findNavController().navigate(R.id.action_permissionFragment_to_locationFragments)
+        }
+    }
+
     override fun onDestroyView() {
-        super.onDestroy()
+        super.onDestroyView()
         binding.btnGrantPermission.setOnClickListener(null)
         _binding = null
     }
@@ -74,18 +103,18 @@ class PermissionFragment : Fragment() {
             openAppSettings()
         }
 
-        val actionColor = androidx.core.content.ContextCompat.getColor(
+        val actionColor = ContextCompat.getColor(
             requireContext(),
             R.color.white
         )
         snackbar.setActionTextColor(actionColor)
 
         val backgroundColor =
-            androidx.core.content.ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark)
+            ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark)
         snackbar.setBackgroundTint(backgroundColor)
 
         val messageColor =
-            androidx.core.content.ContextCompat.getColor(requireContext(), R.color.white)
+            ContextCompat.getColor(requireContext(), R.color.white)
         snackbar.setTextColor(messageColor)
 
         snackbar.show()

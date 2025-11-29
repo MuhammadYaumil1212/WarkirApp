@@ -12,8 +12,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -35,6 +37,7 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,10 +61,14 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
+        binding.ivSearch.setOnClickListener {
+            findNavController().navigate(R.id.action_locationFragments_to_searchLocationFragments)
+        }
+
     }
 
     override fun onDestroyView() {
-        super.onDestroy()
+        super.onDestroyView()
         _binding = null
     }
 
@@ -91,11 +98,17 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun getCurrentDeviceLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+        val fineLocationGranted = ActivityCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val coarseLocationGranted = ActivityCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (fineLocationGranted || coarseLocationGranted) {
             mMap.isMyLocationEnabled = true
             mMap.setPadding(0, 0, 0, 300)
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
@@ -103,13 +116,11 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
                     val currentLatLng = LatLng(location.latitude, location.longitude)
                     updateLocationUI(currentLatLng)
                 } else {
-                    Toast.makeText(
-                        context,
-                        "Lokasi tidak ditemukan. Pastikan GPS aktif.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    requestNewLiveLocation()
                 }
             }
+        } else {
+            Toast.makeText(context, "Izin lokasi diperlukan", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -118,6 +129,28 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
         mMap.addMarker(MarkerOptions().position(latLng))
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
         getAddressFromLatLng(latLng)
+    }
+
+    private fun requestNewLiveLocation() {
+        val fineLocationGranted = ActivityCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val coarseLocationGranted = ActivityCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (fineLocationGranted || coarseLocationGranted) {
+            fusedLocationClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, null)
+                .addOnSuccessListener { location ->
+                    if (location != null) {
+                        val currentLatLng = LatLng(location.latitude, location.longitude)
+                        updateLocationUI(currentLatLng)
+                    }
+                }
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

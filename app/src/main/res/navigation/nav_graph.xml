@@ -27,8 +27,8 @@
 
     <fragment
         android:id="@+id/searchLocationFragments"
-        android:name="com.warkir.warkirapp.permission.presentations.PermissionFragment"
-        android:label="fragment_permission"
+        android:name="com.warkir.warkirapp.Location.presentations.SearchLocationFragment"
+        android:label="fragment_search"
         tools:layout="@layout/fragment_search_locations">
         <action
             android:id="@+id/action_searchLocationFragments_to_welcomeScreenFragments"
