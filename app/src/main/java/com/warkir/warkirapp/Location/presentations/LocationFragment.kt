@@ -89,26 +89,34 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun getAddressFromLatLng(latLng: LatLng) {
-        binding.tvAddressTitle.text = getString(R.string.looking_address_progress)
+        if (_binding != null) {
+            binding.tvAddressTitle.text = getString(R.string.looking_address_progress)
+        }
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-                if (!addresses.isNullOrEmpty()) {
-                    val address = addresses[0]
-                    val fullAddress = address.getAddressLine(0)
-                    selectedAddressString = fullAddress
-                    withContext(Dispatchers.Main) {
-                        binding.tvAddressTitle.text = fullAddress
+                if (_binding != null) {
+                    if (!addresses.isNullOrEmpty()) {
+                        val address = addresses[0]
+                        val fullAddress = address.getAddressLine(0)
+                        selectedAddressString = fullAddress
+                        withContext(Dispatchers.Main) {
+                            binding.tvAddressTitle.text = fullAddress
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            binding.tvAddressTitle.text = getString(R.string.address_notfound)
+                        }
                     }
                 } else {
-                    withContext(Dispatchers.Main) {
-                        binding.tvAddressTitle.text = getString(R.string.address_notfound)
-                    }
+                    binding.tvAddressTitle.text = getString(R.string.address_notfound)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
-                    binding.tvAddressTitle.text = getString(R.string.failed_loading_address)
+                    if (_binding != null) {
+                        binding.tvAddressTitle.text = getString(R.string.failed_loading_address)
+                    }
                 }
             }
         }
