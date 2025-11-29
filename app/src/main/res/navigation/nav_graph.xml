@@ -12,7 +12,12 @@
         tools:layout="@layout/fragment_permission">
         <action
             android:id="@+id/action_permissionFragment_to_locationFragments"
-            app:destination="@id/locationFragments" />
+            app:destination="@id/locationFragments"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -23,6 +28,14 @@
         <action
             android:id="@+id/action_locationFragments_to_searchLocationFragments"
             app:destination="@id/searchLocationFragments" />
+        <action
+            android:id="@+id/action_locationFragments_to_welcomeScreenFragments"
+            app:destination="@id/welcomeScreenFragments"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -31,21 +44,36 @@
         android:label="fragment_search"
         tools:layout="@layout/fragment_search_locations">
         <action
-            android:id="@+id/action_searchLocationFragments_to_welcomeScreenFragments"
-            app:destination="@id/welcomeScreenFragments" />
+            android:id="@+id/action_searchLocationFragments_to_locationFragments"
+            app:destination="@id/locationFragments"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/welcomeScreenFragments"
-        android:name="com.warkir.warkirapp.permission.presentations.PermissionFragment"
-        android:label="fragment_permission"
+        android:name="com.warkir.warkirapp.welcome.presentations.WelcomeScreenFragment"
+        android:label="fragment_welcome"
         tools:layout="@layout/fragment_welcome_screen">
         <action
             android:id="@+id/action_welcomeScreenFragments_to_loginFragments"
-            app:destination="@id/loginFragments" />
+            app:destination="@id/loginFragments"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_welcomeScreenFragments_to_registerFragments"
-            app:destination="@id/registerFragments" />
+            app:destination="@id/registerFragments"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -55,7 +83,12 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragments_to_homeFragments"
-            app:destination="@id/homeFragments" />
+            app:destination="@id/homeFragments"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -65,12 +98,22 @@
         tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragments_to_homeFragments"
-            app:destination="@id/homeFragments" />
+            app:destination="@id/homeFragments"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/homeFragments"
         android:name="com.warkir.warkirapp.permission.presentations.PermissionFragment"
         android:label="fragment_permission"
+        app:enterAnim="@anim/slide_in_right"
+
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"
         tools:layout="@layout/fragment_home" />
 </navigation>

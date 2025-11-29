@@ -8,4 +8,8 @@
     <string name="address_notfound">Alamat tidak ditemukan</string>
     <string name="failed_loading_address">Gagal memuat alamat</string>
     <string name="grant_permission_needed">Izin lokasi diperlukan</string>
+    <string name="selamat_datang_di">Selamat datang di</string>
+    <string name="warkir">warkir</string>
+    <string name="masuk">Masuk</string>
+    <string name="daftar">Daftar</string>
 </resources>
