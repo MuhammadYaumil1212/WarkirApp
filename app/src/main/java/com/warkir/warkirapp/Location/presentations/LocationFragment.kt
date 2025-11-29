@@ -73,7 +73,7 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun getAddressFromLatLng(latLng: LatLng) {
-        binding.tvAddressTitle.text = "Sedang mencari alamat..."
+        binding.tvAddressTitle.text = getString(R.string.looking_address_progress)
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
@@ -85,13 +85,13 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
                     }
                 } else {
                     withContext(Dispatchers.Main) {
-                        binding.tvAddressTitle.text = "Alamat tidak ditemukan"
+                        binding.tvAddressTitle.text = getString(R.string.address_notfound)
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
-                    binding.tvAddressTitle.text = "Gagal memuat alamat"
+                    binding.tvAddressTitle.text = getString(R.string.failed_loading_address)
                 }
             }
         }
@@ -120,7 +120,8 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
                 }
             }
         } else {
-            Toast.makeText(context, "Izin lokasi diperlukan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.grant_permission_needed), Toast.LENGTH_SHORT)
+                .show()
         }
     }
 

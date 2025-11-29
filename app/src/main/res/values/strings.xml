@@ -4,4 +4,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="permission_descriptions">Izinin Kita Akses Lokasimu Dong</string>
+    <string name="looking_address_progress">Sedang mencari alamat...</string>
+    <string name="address_notfound">Alamat tidak ditemukan</string>
+    <string name="failed_loading_address">Gagal memuat alamat</string>
+    <string name="grant_permission_needed">Izin lokasi diperlukan</string>
 </resources>
