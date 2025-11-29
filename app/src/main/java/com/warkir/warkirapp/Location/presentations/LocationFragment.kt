@@ -27,6 +27,7 @@ import com.warkir.warkirapp.Location.data.dataSource.local.LocationDataStore
 import com.warkir.warkirapp.R
 import com.warkir.warkirapp.databinding.FragmentLocationBinding
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
@@ -175,11 +176,13 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
 
     private fun checkLocationAndRedirect() {
         lifecycleScope.launch {
-            locationDataStore.getLocationFlow.collect { userData ->
-                if (userData.isLocationSet)
+            val userData = locationDataStore.getLocationFlow.first()
+            if (userData.isLocationSet) {
+                if (isAdded && view != null) {
                     findNavController().navigate(
                         R.id.action_locationFragments_to_welcomeScreenFragments
                     )
+                }
             }
         }
     }
