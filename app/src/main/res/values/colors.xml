@@ -3,6 +3,7 @@
     <!-- Primary -->
     <color name="colorPrimary">#369EB2</color>
     <color name="colorPrimaryDark">#287D8C</color>
+    <color name="colorPrimaryVariant">#058BA4</color>
     <color name="colorPrimaryLight">#A6D9E1</color>
 
     <!-- Accent -->
