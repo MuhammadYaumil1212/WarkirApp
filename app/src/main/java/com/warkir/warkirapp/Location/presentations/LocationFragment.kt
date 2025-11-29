@@ -50,7 +50,9 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         geocoder = Geocoder(requireContext(), Locale.getDefault())
-        binding.btnConfirmLocation.setOnClickListener {}
+        binding.btnConfirmLocation.setOnClickListener {
+            findNavController().navigate(R.id.action_locationFragments_to_welcomeScreenFragments)
+        }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -115,6 +117,7 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
                 if (location != null) {
                     val currentLatLng = LatLng(location.latitude, location.longitude)
                     updateLocationUI(currentLatLng)
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 } else {
                     requestNewLiveLocation()
                 }
@@ -149,6 +152,7 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
                     if (location != null) {
                         val currentLatLng = LatLng(location.latitude, location.longitude)
                         updateLocationUI(currentLatLng)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
                 }
         }
@@ -161,6 +165,7 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
 
         mMap.setOnMapClickListener { latLng ->
             updateLocationUI(latLng)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
         getCurrentDeviceLocation()
     }
