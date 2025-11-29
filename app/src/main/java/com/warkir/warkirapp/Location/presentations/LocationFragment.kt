@@ -23,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.warkir.warkirapp.Location.data.dataSource.local.LocationDataStore
 import com.warkir.warkirapp.R
 import com.warkir.warkirapp.databinding.FragmentLocationBinding
 import kotlinx.coroutines.Dispatchers
@@ -37,6 +38,14 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
+    private lateinit var locationDataStore: LocationDataStore
+    private var selectedLatLng: LatLng? = null
+    private var selectedAddressString: String = ""
+
+    override fun onStart() {
+        super.onStart()
+        checkLocationAndRedirect()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,10 +57,14 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        locationDataStore = LocationDataStore(requireContext())
         geocoder = Geocoder(requireContext(), Locale.getDefault())
         binding.btnConfirmLocation.setOnClickListener {
-            findNavController().navigate(R.id.action_locationFragments_to_welcomeScreenFragments)
+            if (selectedLatLng != null) {
+                saveToDataStoreAndNavigate()
+            } else {
+                Toast.makeText(context, "Mohon tunggu lokasi terdeteksi", Toast.LENGTH_SHORT).show()
+            }
         }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
@@ -82,6 +95,7 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
                 if (!addresses.isNullOrEmpty()) {
                     val address = addresses[0]
                     val fullAddress = address.getAddressLine(0)
+                    selectedAddressString = fullAddress
                     withContext(Dispatchers.Main) {
                         binding.tvAddressTitle.text = fullAddress
                     }
@@ -129,6 +143,7 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun updateLocationUI(latLng: LatLng) {
+        selectedLatLng = latLng
         mMap.clear()
         mMap.addMarker(MarkerOptions().position(latLng))
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
@@ -158,6 +173,27 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    private fun checkLocationAndRedirect() {
+        lifecycleScope.launch {
+            locationDataStore.getLocationFlow.collect { userData ->
+                if (userData.isLocationSet)
+                    findNavController().navigate(
+                        R.id.action_locationFragments_to_welcomeScreenFragments
+                    )
+            }
+        }
+    }
+
+    private fun saveToDataStoreAndNavigate() {
+        lifecycleScope.launch {
+            val latitude = selectedLatLng!!.latitude
+            val longitude = selectedLatLng!!.longitude
+
+            locationDataStore.saveLocation(selectedAddressString, latitude, longitude)
+            findNavController().navigate(R.id.action_locationFragments_to_welcomeScreenFragments)
+        }
+    }
+
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.uiSettings.isZoomControlsEnabled = true
@@ -169,4 +205,5 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
         }
         getCurrentDeviceLocation()
     }
+
 }
